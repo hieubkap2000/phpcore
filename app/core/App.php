@@ -14,6 +14,9 @@ class App
         $this->router->get('/product',function(){
             echo "This is product page.";
         });
+        $this->router->get('/home',function(){
+            echo "This is home page.";
+        });
     }
     public function run()
     {
