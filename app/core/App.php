@@ -1,9 +1,22 @@
 <?php
+
+require_once(dirname(__FILE__) . '/Router.php');
+
 class App
 {
-
+    private $router;
+    public function __construct()
+    {
+        $this->router = new Router();
+        $this->router->get('/',function(){
+            echo "This is home page.";
+        });
+        $this->router->get('/product',function(){
+            echo "This is product page.";
+        });
+    }
     public function run()
     {
-        echo "running...!";
+        return $this->router->run();
     }
 }
