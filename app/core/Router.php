@@ -2,6 +2,7 @@
 class Router
 {
     private $routesrs = [];
+
     private function getRequestUrl()
     {
         $url =  isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
@@ -37,24 +38,52 @@ class Router
 
     public function map()
     {
+        $checkRoute = false;
+        $params = [];
         $requestUrl = $this->getRequestUrl();
         $requestMethod = $this->getRequestMethod();
 
         $routesrs = $this->routesrs;
         foreach ($routesrs as $router) {
-            // echo "<pre>";
-            // print_r($router);
             list($method, $url, $action) = $router;
-            echo $url . "<br>";
-            if (strpos($method, $requestMethod) !== false) {
+
+            if (strpos($method, $requestMethod) === false) {
+                continue;
+            }
+
+            if ($url === '*') {
+                $checkRoute = true;
+            } elseif (strpos($url, '{') === false) {
+
                 if (strcmp(strtolower($url), strtolower($requestUrl)) === 0) {
-                    if (is_callable($action)) {
-                        call_user_func($action);
-                        return;
-                    }
+                    $checkRoute = true;
                 } else {
                     continue;
                 }
+            } elseif (strpos($url, '}') === false) {
+                continue;
+            } else {
+                $routeParam = explode('/', $url);
+                $requestParam =  explode('/', $requestUrl);
+
+                if (count($routeParam) !== count($requestParam)) {
+                    continue;
+                }
+
+                foreach ($routeParam as $k => $rp) {
+                    if (preg_match('/^{\w+}/', $rp)) {
+                        $params[] = $requestParam[$k];
+                    }
+                }
+                $checkRoute = true;
+            }
+
+
+            if ($checkRoute === true) {
+                if (is_callable($action)) {
+                    call_user_func_array($action, $params);
+                }
+                return;
             } else {
                 continue;
             }
