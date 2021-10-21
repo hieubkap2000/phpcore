@@ -1,12 +1,16 @@
 <?php
+
+namespace app\core;
+
 class Router
 {
     private $routesrs = [];
 
     private function getRequestUrl()
     {
+        $basePath = \App::getConfig()['basePath'];
         $url =  isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-        $url = str_replace('/phpcore/public', '', $url);
+        $url = str_replace($basePath, '', $url);
         $url = $url === '' || empty($url) ? '/' : $url;
         return $url;
     }
