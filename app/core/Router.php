@@ -1,16 +1,19 @@
 <?php
-
-namespace app\core;
-
 class Router
 {
-    private $routesrs = [];
+    private static $routesrs = [];
+
+    private $basePath;
+
+    function __construct($basePath)
+    {
+        $this->basePath = $basePath;
+    }
 
     private function getRequestUrl()
     {
-        $basePath = \App::getConfig()['basePath'];
         $url =  isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-        $url = str_replace($basePath, '', $url);
+        $url = str_replace($this->basePath, '', $url);
         $url = $url === '' || empty($url) ? '/' : $url;
         return $url;
     }
@@ -20,24 +23,24 @@ class Router
         return isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
     }
 
-    private function addRouter($method, $url, $action)
+    private static function addRouter($method, $url, $action)
     {
-        $this->routesrs[] = [$method, $url, $action];
+        self::$routesrs[] = [$method, $url, $action];
     }
 
-    public function get($url, $action)
+    public static function get($url, $action)
     {
-        $this->addRouter('GET', $url, $action);
+        self::addRouter('GET', $url, $action);
     }
 
-    public function post($url, $action)
+    public static function post($url, $action)
     {
-        $this->addRouter('POST', $url, $action);
+        self::addRouter('POST', $url, $action);
     }
 
-    public function any($url, $action)
+    public static function any($url, $action)
     {
-        $this->addRouter('GET|POST', $url, $action);
+        self::addRouter('GET|POST', $url, $action);
     }
 
     public function map()
@@ -47,7 +50,7 @@ class Router
         $requestUrl = $this->getRequestUrl();
         $requestMethod = $this->getRequestMethod();
 
-        $routesrs = $this->routesrs;
+        $routesrs = self::$routesrs;
         foreach ($routesrs as $router) {
             list($method, $url, $action) = $router;
 

@@ -1,7 +1,7 @@
 <?php
 return [
     'basePath' => '/phpcore/public',
-    'rootPath' => dirname(dirname(__FILE__)),
+    'rootDir' => dirname(__DIR__),
     'db' => [
         'user' => '',
         'password' => ''

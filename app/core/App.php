@@ -1,8 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/Autoload.php');
 
-use app\core\Router;
-
 class App
 {
     private $router;
@@ -10,25 +8,8 @@ class App
 
     public function __construct()
     {
-        new Autoload;
-        $this->router = new Router();
-
-        $this->router->get('/home', 'HomeController@index');
-        $this->router->get('/home/details/{name}', 'HomeController@details');
-
-        $this->router->get('/', function () {
-            echo "This is home page.";
-        });
-
-        $this->router->get('/product/{id}/{name}', function ($id, $name) {
-            echo $id;
-            echo "<br>";
-            echo $name;
-        });
-
-        $this->router->any('*', function () {
-            echo "This is notfound page.";
-        });
+        new Autoload(self::$config['rootDir']);
+        $this->router = new Router(self::$config['basePath']);
     }
 
     public static function setConfig($config)
