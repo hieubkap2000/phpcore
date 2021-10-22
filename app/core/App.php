@@ -4,7 +4,9 @@ require_once(dirname(__FILE__) . '/Autoload.php');
 class App
 {
     private $router;
-    public static $config;
+    private static $config;
+    private static $controller;
+    private static $action;
 
     public function __construct()
     {
@@ -21,6 +23,27 @@ class App
     {
         return self::$config;
     }
+
+    public static function setController($controller)
+    {
+        self::$controller = $controller;
+    }
+
+    public static function getController()
+    {
+        return self::$controller;
+    }
+
+    public static function setAction($action)
+    {
+        self::$action = $action;
+    }
+
+    public static function getAction()
+    {
+        return self::$action;
+    }
+
 
     public function run()
     {

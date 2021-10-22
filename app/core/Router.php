@@ -112,8 +112,9 @@ class Router
         $classNameSpace = 'app\\controllers\\' . $className;
         if (class_exists($classNameSpace)) {
             $object = new $classNameSpace;
-
+            App::setController($className);
             if (method_exists($classNameSpace, $methodName)) {
+                App::setAction($methodName);
                 call_user_func_array([$object, $methodName], $params);
             } else {
                 echo 'Method ' . $methodName . ' does not exists !';

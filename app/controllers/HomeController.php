@@ -2,7 +2,10 @@
 
 namespace app\controllers;
 
-class HomeController
+use app\core\Controller;
+use \App;
+
+class HomeController extends Controller
 {
     public function __construct()
     {
@@ -10,7 +13,7 @@ class HomeController
 
     public function index()
     {
-        echo "This is Home Controller and method index !";
+        
     }
 
     public function details($name)
